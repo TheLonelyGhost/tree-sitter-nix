@@ -2,4 +2,4 @@
 
 test:
 	nix flake check
-	nix build '.#neovim' && rm -f ./result
+	nix build --dry-run '.#tree-sitter' && rm -f ./result

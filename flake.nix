@@ -27,7 +27,9 @@
             pkgs.gnumake
           ];
           buildInputs = [
-            tree-sitter
+            # tree-sitter
+            pkgs.nix-prefetch-git
+            pkgs.jq
           ];
         };
 

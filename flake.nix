@@ -2,18 +2,19 @@
   description = "Treesitter Grammars in a box";
   inputs = {
     nixpkgs.url = "flake:nixpkgs";
-
-    flake-utils.url = "github:numtide/flake-utils";
+    flake-utils.url = "flake:flake-utils";
     flake-compat.url = "github:edolstra/flake-compat";
     flake-compat.flake = false;
+    overlays.url = "github:thelonelyghost/blank-overlay-nix";
   };
 
-  outputs = { self, nixpkgs, flake-utils, flake-compat }:
+  outputs = { self, nixpkgs, flake-utils, flake-compat, overlays }:
     flake-utils.lib.eachDefaultSystem (system:
       let
         pkgs = import nixpkgs {
           inherit system;
           # config.allowUnfree = true;
+          overlays = [overlays.overlays.default];
         };
 
         tree-sitter = pkgs.callPackage ./tree-sitter {

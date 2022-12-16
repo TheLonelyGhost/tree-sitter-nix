@@ -20,6 +20,10 @@
         tree-sitter = pkgs.callPackage ./tree-sitter {
           inherit (pkgs.darwin.apple_sdk.frameworks) Security;
         };
+
+        vimPlugins = pkgs.callPackage ./neovim {
+          inherit (pkgs.darwin.apple_sdk.frameworks) Security;
+        };
       in
       {
         devShells.default = pkgs.mkShell {
@@ -35,6 +39,7 @@
         };
 
         packages = {
+          inherit (vimPlugins) nvim-treesitter;
           inherit tree-sitter;
 
           default = tree-sitter;

@@ -391,7 +391,7 @@ let
 
 
 
-  jsonFile = name: val: (formats.json { }).generate name val;
+  jsonFile = (formats.json { }).generate;
 
   # implementation of the updater
   updateImpl = passArgs "updateImpl-with-args" {
@@ -454,11 +454,11 @@ let
     ${updateImpl} print-all-grammars-nix-file "$(< ${
         jsonFile "all-grammars.json" {
           allGrammars =
-            (lib.mapAttrsToList
+            lib.mapAttrsToList
               (nixRepoAttrName: attrs: attrs // {
                 inherit nixRepoAttrName;
               })
-              allGrammars);
+              allGrammars;
           inherit outputDir;
         }
     })"

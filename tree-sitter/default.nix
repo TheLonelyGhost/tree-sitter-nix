@@ -44,22 +44,22 @@ let
 
   update-all-grammars = callPackage ./update.nix {};
 
-  fetchGrammar = (v: fetchgit { inherit (v) url rev sha256 fetchSubmodules; });
+  fetchGrammar = v: fetchgit { inherit (v) url rev sha256 fetchSubmodules; };
 
   grammars =
     runCommand "grammars" { } (''
       mkdir $out
     '' + (lib.concatStrings (lib.mapAttrsToList
-      (name: grammar: "ln -s ${if grammar ? src then grammar.src else fetchGrammar grammar} $out/${name}\n")
+      (name: grammar: "ln -s ${grammar.src or (fetchGrammar grammar)} $out/${name}\n")
       (import ./grammars { inherit lib; }))));
   builtGrammars =
     let
       change = name: grammar:
         callPackage ./grammar.nix { } {
-          language = if grammar ? language then grammar.language else name;
+          language = grammar.language or name;
           inherit version;
-          source = if grammar ? src then grammar.src else fetchGrammar grammar;
-          location = if grammar ? location then grammar.location else null;
+          source = grammar.src or (fetchGrammar grammar);
+          location = grammar.location or null;
         };
       grammars' = import ./grammars { inherit lib; } // extraGrammars;
       grammars = grammars' //
@@ -71,7 +71,7 @@ let
         { tree-sitter-markdown = grammars'.tree-sitter-markdown // { location = "tree-sitter-markdown"; }; } //
         { tree-sitter-markdown-inline = grammars'.tree-sitter-markdown // { language = "markdown_inline"; location = "tree-sitter-markdown-inline"; }; };
     in
-    lib.mapAttrs change (grammars);
+    lib.mapAttrs change grammars;
 
   # Usage:
   # pkgs.tree-sitter.withPlugins (p: [ p.tree-sitter-c p.tree-sitter-java ... ])

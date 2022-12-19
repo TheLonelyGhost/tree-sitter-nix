@@ -1,5 +1,8 @@
-.PHONY: test
+NIX := nix
+STATIX := statix
 
+.PHONY: test
 test:
-	nix flake check
-	nix build --dry-run '.#tree-sitter' && rm -f ./result
+	$(STATIX) check
+	$(NIX) flake check
+	$(NIX) build --dry-run '.#tree-sitter' && rm -f ./result

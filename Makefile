@@ -1,5 +1,5 @@
 NIX := nix
-STATIX := statix
+STATIX := $(NIX) run nixpkgs\#statix --
 
 .PHONY: test
 test:

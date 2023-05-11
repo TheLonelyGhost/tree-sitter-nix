@@ -32,6 +32,9 @@
             pkgs.gnumake
             pkgs.statix
           ];
+
+          STATIX = "${pkgs.statix}/bin/statix";
+
           buildInputs = [
             # tree-sitter
             pkgs.nix-prefetch-git

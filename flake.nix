@@ -14,7 +14,7 @@
         pkgs = import nixpkgs {
           inherit system;
           # config.allowUnfree = true;
-          overlays = [overlays.overlays.default];
+          overlays = [ overlays.overlays.default ];
         };
 
         tree-sitter = pkgs.callPackage ./tree-sitter {
@@ -31,19 +31,19 @@
             pkgs.bashInteractive
             pkgs.gnumake
             pkgs.statix
+            pkgs.nix-prefetch-git
+            pkgs.jq
           ];
 
           STATIX = "${pkgs.statix}/bin/statix";
 
           buildInputs = [
             # tree-sitter
-            pkgs.nix-prefetch-git
-            pkgs.jq
           ];
         };
 
         packages = {
-          inherit (vimPlugins) nvim-treesitter;
+          inherit (vimPlugins) nvim-treesitter nvim-treesitter-context nvim-treesitter-pyfold nvim-ts-rainbow nvim-treesitter-textobjects;
           inherit tree-sitter;
 
           default = tree-sitter;
